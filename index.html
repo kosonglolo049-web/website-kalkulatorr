@@ -1,0 +1,179 @@
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator + Konversi Mata Uang</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('https://st4.depositphotos.com/1036970/40851/v/1600/depositphotos_408516956-stock-illustration-mathematical-formulas-drawn-hand-background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+    .calculator {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      width: 320px;
+      box-shadow: 0 10px 25px rgba(233, 231, 231, 0.4);
+    }
+    #display {
+      width: 100%;
+      height: 60px;
+      font-size: 22px;
+      margin-bottom: 15px;
+      text-align: right;
+      padding: 4px;
+      border: 2px solid #ccc;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #283c86;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    button small {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    button:hover {
+      background: #45a247;
+    }
+    currency-box {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    select {
+      width: 48%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .clear-btn {
+      grid-column: span 4;
+      background: important;
+    }
+    .history {
+      margin-top: 15px;
+      padding: 5px;
+      border-top: 1px #ccc;
+      font-size: 14px;
+      max-height: 120px;
+      overflow-y: auto;
+      background: #fff;
+    }
+    .history.entry{
+      margin: 2px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="clickSound">
+    <source src="https://www.fesliyanstudios.com/play-'';mp3/387" type="audio/mpeg">
+  </audio>
+
+ 
+  <div class="currency-box">
+    <select id="fromCurrency">
+      <option value="IDR">IDR</option>
+      <option value="USD">USD</option>
+    </select>
+    <select id="toCurrency">
+      <option value="USD">USD</option>
+      <option value="IDR">IDR</option>
+    </select>
+  </div>
+  <button style="margin-top: 10px; width: 100%;" onclick="convertCurrency()">Konversi Mata Uang</button>
+
+  
+  <div class="calculator">
+    <input type="text" id="display" disabled>
+    <div class="buttons">
+      <button onclick="press('1')">1<small>One</small></button>
+      <button onclick="press('2')">2<small>Two</small></button>
+      <button onclick="press('3')">3<small>Three</small></button>
+
+      <button onclick="press('4')">4<small>Four</small></button>
+      <button onclick="press('5')">5<small>Five</small></button>
+      <button onclick="press('6')">6<small>Six</small></button>
+
+      <button onclick="press('7')">7<small>Seven</small></button>
+      <button onclick="press('8')">8<small>Eight</small></button>
+      <button onclick="press('9')">9<small>Nine</small></button>
+
+      <button onclick="press('0')">0<small>Zero</small></button>
+      <button onclick="press('.')">.<small>Dot</small></button>
+      <button onclick="calculate()">=<small>Equal</small></button>
+      <button onclick="press('+')">+<small>plus</small></button>
+      <button onclick="press('*')">*</button>
+      <button onclick="press('-')">-<small>min</small></button>
+      <button class="clear-btn" onclick="clearDisplay()">C<small>Clear</small></button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+    let clickSound = document.getElementById("clickSound");
+
+    const rates = {
+      IDR: { USD: 0.000065, IDR: 1 },
+      USD: { IDR: 15500, USD: 1 },
+    };
+
+    function playSound() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    function press(num) {
+      playSound();
+      display.value += num;
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = "Error!";
+      }
+    }
+
+    function clearDisplay() {
+      display.value = "";
+    }
+
+    function convertCurrency() {
+      let amount = parseFloat(display.value);
+      let fromCurrency = document.getElementById("fromCurrency").value;
+      let toCurrency = document.getElementById("toCurrency").value;
+
+      if (isNaN(amount)) {
+        display.value = "Masukkan angka!";
+        return;
+      }
+
+      let result = amount * rates[fromCurrency][toCurrency];
+      display.value = result.toFixed(2) + " " + toCurrency;
+    }
+  </script>
+</body>
+</html>
